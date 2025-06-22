@@ -1,25 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Drone Shot</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pranay Construction Site</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
       background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
     }
-    img {
-      max-width: 100%;
-      max-height: 100%;
+    .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .controls-overlay {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      padding: 6px 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      gap: 8px;
+      z-index: 1000; /* ensures it's above iframe content */
+    }
+    select {
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 4px;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+    select:hover {
+      border-color: #fff;
+    }
+
+    /* Mobile friendly adjustments */
+    @media (max-width: 600px) {
+      .controls-overlay {
+        flex-direction: column;
+        bottom: 10px;
+        right: 10px;
+        padding: 8px;
+        gap: 6px;
+      }
+      select {
+        font-size: 16px;
+        padding: 8px 12px;
+      }
     }
   </style>
 </head>
 <body>
- <iframe width="100%" height="640" frameborder="0" allow="xr-spatial-tracking; gyroscope; accelerometer" allowfullscreen scrolling="no" src="https://kuula.co/share/collection/71g0s?logo=1&info=1&fs=1&vr=0&thumbs=1"></iframe>
- <script src="https://static.kuula.io/embed.js" data-kuula="https://kuula.co/share/collection/71g0s?logo=1&info=1&fs=1&vr=0&thumbs=1" data-width="100%" data-height="640px"></script>
+
+<div class="iframe-wrapper">
+  <iframe id="viewer" src=""></iframe>
+  <div class="controls-overlay">
+    <select id="mode" onchange="updateIframe()">
+      <option value="day" selected>Day</option>
+      <option value="night">Night</option>
+    </select>
+    <select id="percent" onchange="updateIframe()">
+      <option value="20" selected>20</option>
+      <option value="40">40</option>
+      <option value="60">60</option>
+      <option value="80">80</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+</div>
+
+<script>
+  const iframeMap = {
+    day: {
+      20: "https://kuula.co/share/hMmbJ?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      40: "https://kuula.co/share/hMh7D?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      60: "https://kuula.co/share/hMh7b?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      80: "https://kuula.co/share/hMh7K?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      100: "https://kuula.co/share/hMh7X?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1"
+    },
+    night: {
+      20: "https://kuula.co/share/hMmGh?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      40: "https://kuula.co/share/hMmGk?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      60: "https://kuula.co/share/hMmGl?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      80: "https://kuula.co/share/hMmG0?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1",
+      100: "https://kuula.co/share/hMmGm?logo=1&info=1&fs=1&vr=0&zoom=1&thumbs=1"
+    }
+  };
+
+  function updateIframe() {
+    const mode = document.getElementById("mode").value;
+    const percent = document.getElementById("percent").value;
+    const iframeSrc = iframeMap[mode][percent];
+    document.getElementById("viewer").src = iframeSrc;
+  }
+
+  // Initialize on load
+  updateIframe();
+</script>
+
 </body>
 </html>
